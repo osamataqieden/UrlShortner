@@ -2,7 +2,7 @@
 {
     public interface IUrlService
     {
-        bool isExist(string ShortID);
+        bool isExist(string ShortID, string LongURL);
         bool isExpired(string ShortID);
         string GetShortUrl(string url);
         bool DeleteUrl(string ShortID);

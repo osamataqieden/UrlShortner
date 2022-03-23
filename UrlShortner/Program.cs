@@ -1,12 +1,15 @@
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 //builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
-builder.Services.AddRazorPages();
                 //.AddMvcLocalization();
 builder.Services.AddControllers();
+builder.Services.AddRazorPages();
 builder.Services.AddScoped<UrlShortner.Data.IURlRepository, UrlShortner.Data.RelationalUrlRepository>();
 builder.Services.AddScoped<UrlShortner.Services.IUrlService, UrlShortner.Services.UrlService>();
+builder.Services.AddDbContext<UrlShortner.Data.ApplicationDbContext>(options => options.UseSqlServer("name=ConnectionStrings:DefaultConnection"));
 builder.Logging.ClearProviders();
 builder.Logging.AddFile("logs/log-{Date}.txt");
 
@@ -33,8 +36,9 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.MapControllers();
+
 app.MapRazorPages();
 
-app.MapControllers();
 
 app.Run();
