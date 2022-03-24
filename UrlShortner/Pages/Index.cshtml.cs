@@ -8,6 +8,7 @@ namespace UrlShortner.Pages
     {
         private readonly ILogger<IndexModel> _logger;
         private readonly Services.IUrlService _urlService;
+        public string NewUrl { get; set; }
 
         public IndexModel(ILogger<IndexModel> logger, Services.IUrlService urlService)
         {
@@ -29,6 +30,7 @@ namespace UrlShortner.Pages
                     {
                         Url url = _urlService.AddUrl(URL);
                         _logger.LogInformation($"{URL} shortned to ${url.ShortID}");
+                        NewUrl = url.ShortID;
                     }
                 }
             }

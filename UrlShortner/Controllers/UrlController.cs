@@ -17,8 +17,20 @@ namespace UrlShortner.Controllers
         [HttpGet]
         public IActionResult Link(string ID)
         {
-            string url = _service.GetLongUrl(ID);
-            return Redirect(url);
+            try
+            {
+                string url = _service.GetLongUrl(ID);
+                return Redirect(url);
+            }
+            catch(Exception ex)
+            {
+                return new JsonResult(new
+                {
+                    Error = "Link not found"
+                }
+                );
+                //return RedirectToPage("Index");
+            }
         }
     }
 }
