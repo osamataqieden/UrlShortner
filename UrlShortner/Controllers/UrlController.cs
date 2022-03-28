@@ -15,7 +15,7 @@ namespace UrlShortner.Controllers
             _service = service;
             _logger = logger;
         }
-
+        [ResponseCache(Duration = 30)]
         [Route("/{ID}")]
         [HttpGet]
         public IActionResult Link(string ID)
@@ -36,6 +36,7 @@ namespace UrlShortner.Controllers
             }
         }
 
+        [ResponseCache(Duration = 30)]
         [Route("/API/Url")]
         [HttpGet]
         public IActionResult GetAllUrls()
@@ -55,6 +56,7 @@ namespace UrlShortner.Controllers
             }
         }
 
+        [ResponseCache(Duration = 30)]
         [Route("/API/Url/Paged")]
         [HttpGet]
         public IActionResult GetPagedUrls(string pageSize, string pageNum)
@@ -105,25 +107,6 @@ namespace UrlShortner.Controllers
                 else return Ok(new JsonResult(new { Result = "Url not found" }));
             }
             catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                return BadRequest(new JsonResult(new { Error = ex.Message }));
-            }
-        }
-
-        [Route("/API/Url")]
-        [HttpPatch]
-        public IActionResult UpdateURL([FromForm] Models.Url url)
-        {
-            try
-            {
-                if (_service.UpdateURL(url))
-                {
-                    return Ok(new JsonResult(new { Result = "Url is updated" }));
-                }
-                return BadRequest(new JsonResult(new { Result = "Url not updated due to unkown error" }));
-            }
-            catch(Exception ex)
             {
                 _logger.LogError(ex.Message);
                 return BadRequest(new JsonResult(new { Error = ex.Message }));

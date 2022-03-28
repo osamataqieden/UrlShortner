@@ -34,34 +34,6 @@ namespace UrlShortner.Services
             }
             throw new Exception($"{url} already exist");
         }
-
-        public Url AddUrl(string url, string DesiredShortID)
-        {
-            if (url == null || DesiredShortID == null)
-                throw new ArgumentNullException("url");
-            if (isExist(DesiredShortID))
-                throw new ArgumentException("Short code already exists");
-            Url SavedURL = new Url
-            {
-                LongUrl = url,
-                ShortID = DesiredShortID,
-                CreatedOn = DateTime.Now,
-                IsActive = true,
-            };
-            _repository.AddUrl(SavedURL);
-            return SavedURL;
-        }
-
-        public bool UpdateURL(Models.Url newURL)
-        {
-            if (isExist("", newURL.LongUrl))
-            {
-                _repository.UpdateUrl(newURL);
-                return true;
-            }
-            throw new Exception("Not found");
-        }
-
         public bool DeleteUrl(string ShortID)
         {
             if (!string.IsNullOrEmpty(ShortID) && isExist(ShortID))
@@ -141,6 +113,11 @@ namespace UrlShortner.Services
         }
 
         public bool isExpired(string ShortID)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Url AddUrl(string url, string DesiredShortID)
         {
             throw new NotImplementedException();
         }

@@ -6,7 +6,6 @@
 
         Models.Url GetByLongURL(string LongURL);
         bool AddUrl(Models.Url url);
-        bool UpdateUrl(Models.Url url);
         bool DeleteUrl(Models.Url url);
         bool DeleteUrl(string ShortURL);
         List<Models.Url> GetByDate(DateTime date, bool beforeFlag = false, bool returnDisabled = false);
