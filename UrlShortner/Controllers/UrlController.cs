@@ -76,7 +76,8 @@ namespace UrlShortner.Controllers
 
         [Route("/API/Url")]
         [HttpPost]
-        public IActionResult AddUrl([FromBody]string url)
+        [Consumes("application/x-www-form-urlencoded")]
+        public IActionResult AddUrl([FromForm]string url)
         {
             try
             {

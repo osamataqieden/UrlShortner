@@ -3,7 +3,6 @@
     public interface IURlRepository
     {
         Models.Url GetByID(string id);
-
         Models.Url GetByLongURL(string LongURL);
         bool AddUrl(Models.Url url);
         bool DeleteUrl(Models.Url url);
