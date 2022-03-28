@@ -100,11 +100,11 @@ namespace UrlShortner.Data
 
         public bool UpdateUrl(Url url)
         {
-            Url currentUrl = GetByID(url.ShortID);
+            var currentUrl = GetByLongURL(url.LongUrl);
             if (currentUrl == null)
                 throw new Exception("Element not found");
-            url.ShortID = currentUrl.ShortID ?? url.ShortID;
-            url.LongUrl = currentUrl.LongUrl ?? url.LongUrl;
+            url.ShortID = url.ShortID ?? currentUrl.ShortID;
+            url.LongUrl = url.LongUrl ?? currentUrl.LongUrl;
             url.CreatedOn = currentUrl.CreatedOn;
             url.IsActive = currentUrl.IsActive;
             _context.urls.Remove(currentUrl);

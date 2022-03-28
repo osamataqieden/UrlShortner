@@ -8,11 +8,14 @@ namespace UrlShortner.Controllers
     {
 
         private readonly Services.IUrlService _service;
+        private readonly ILogger<UrlController> _logger;
 
-        public UrlController(Services.IUrlService service)
+        public UrlController(Services.IUrlService service, ILogger<UrlController> logger)
         {
             _service = service;
+            _logger = logger;
         }
+
         [Route("/{ID}")]
         [HttpGet]
         public IActionResult Link(string ID)
@@ -22,14 +25,108 @@ namespace UrlShortner.Controllers
                 string url = _service.GetLongUrl(ID);
                 return Redirect(url);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                return new JsonResult(new
+                _logger.LogError(ex.Message);
+                return BadRequest(new JsonResult(new
                 {
                     Error = "Link not found"
                 }
-                );
-                //return RedirectToPage("Index");
+                ));
+            }
+        }
+
+        [Route("/API/Url")]
+        [HttpGet]
+        public IActionResult GetAllUrls()
+        {
+            try
+            {
+                return Ok(new JsonResult(_service.GetAllUrls()));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest(new JsonResult(new
+                {
+                    Error = ex.Message
+                }
+                ));
+            }
+        }
+
+        [Route("/API/Url/Paged")]
+        [HttpGet]
+        public IActionResult GetPagedUrls(string pageSize, string pageNum)
+        {
+            try
+            {
+                int PageSize = Convert.ToInt32(pageSize);
+                int PageNum = Convert.ToInt32(pageNum);
+                return Ok(new JsonResult(_service.GetPagedUrls(PageNum, PageSize)));
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest(new JsonResult(new { Error = ex.Message }));
+            }
+        }
+
+        [Route("/API/Url")]
+        [HttpPost]
+        public IActionResult AddUrl([FromBody]string url)
+        {
+            try
+            {
+                var result = _service.AddUrl(url);
+                return Ok(new JsonResult(result));
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest(new JsonResult(new
+                {
+                    Error = ex.Message
+                }));
+            }
+        }
+
+        [Route("/API/Url")]
+        [HttpDelete]
+        public IActionResult RemoveURL([FromForm]string url)
+        {
+            try
+            {
+                if (_service.isExist("", url))
+                {
+                    _service.DeleteUrl(_service.GetShortUrl(url));
+                    return Ok(new JsonResult(new { Result = "Success" }));
+                }
+                else return Ok(new JsonResult(new { Result = "Url not found" }));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest(new JsonResult(new { Error = ex.Message }));
+            }
+        }
+
+        [Route("/API/Url")]
+        [HttpPatch]
+        public IActionResult UpdateURL([FromForm] Models.Url url)
+        {
+            try
+            {
+                if (_service.UpdateURL(url))
+                {
+                    return Ok(new JsonResult(new { Result = "Url is updated" }));
+                }
+                return BadRequest(new JsonResult(new { Result = "Url not updated due to unkown error" }));
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest(new JsonResult(new { Error = ex.Message }));
             }
         }
     }

@@ -19,16 +19,20 @@ namespace UrlShortner.Services
         {
             if (url == null)
                 throw new ArgumentNullException("url");
-            string hash = GetHashedURL(url);
-            Url SavedURL = new Url
+            if(!isExist("", url))
             {
-                LongUrl = url,
-                ShortID = hash,
-                CreatedOn = DateTime.Now,
-                IsActive = true,
-            };
-            _repository.AddUrl(SavedURL);
-            return SavedURL;
+                string hash = GetHashedURL(url);
+                Url SavedURL = new Url
+                {
+                    LongUrl = url,
+                    ShortID = hash,
+                    CreatedOn = DateTime.Now,
+                    IsActive = true,
+                };
+                _repository.AddUrl(SavedURL);
+                return SavedURL;
+            }
+            throw new Exception($"{url} already exist");
         }
 
         public Url AddUrl(string url, string DesiredShortID)
@@ -46,6 +50,16 @@ namespace UrlShortner.Services
             };
             _repository.AddUrl(SavedURL);
             return SavedURL;
+        }
+
+        public bool UpdateURL(Models.Url newURL)
+        {
+            if (isExist("", newURL.LongUrl))
+            {
+                _repository.UpdateUrl(newURL);
+                return true;
+            }
+            throw new Exception("Not found");
         }
 
         public bool DeleteUrl(string ShortID)
@@ -112,6 +126,18 @@ namespace UrlShortner.Services
                 }
             }
             throw new ArgumentNullException("ShortID and LongURL");
+        }
+
+        public List<Url> GetAllUrls()
+        {
+            return _repository.GetAll();
+        }
+
+        public List<Models.Url> GetPagedUrls(int page, int pageSize)
+        {
+            int startIndex = page * pageSize;
+            int endIndex = startIndex + pageSize;
+            return _repository.GetAll(startIndex, endIndex);
         }
 
         public bool isExpired(string ShortID)

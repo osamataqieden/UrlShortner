@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,6 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 //builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
                 //.AddMvcLocalization();
 builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 builder.Services.AddRazorPages();
 builder.Services.AddScoped<UrlShortner.Data.IURlRepository, UrlShortner.Data.RelationalUrlRepository>();
 builder.Services.AddScoped<UrlShortner.Services.IUrlService, UrlShortner.Services.UrlService>();
@@ -23,9 +27,11 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseSwagger();
+app.UseSwaggerUI();
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 //var cultures = new[] { "en", "ar" };
 //var LocalizationOptions = new RequestLocalizationOptions()
 //                              .AddSupportedCultures(cultures)
