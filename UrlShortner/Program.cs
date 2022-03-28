@@ -3,14 +3,9 @@ using Microsoft.OpenApi.Models;
 
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-//builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
-                //.AddMvcLocalization();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddRazorPages();
 builder.Services.AddScoped<UrlShortner.Data.IURlRepository, UrlShortner.Data.RelationalUrlRepository>();
 builder.Services.AddScoped<UrlShortner.Services.IUrlService, UrlShortner.Services.UrlService>();
 builder.Services.AddDbContext<UrlShortner.Data.ApplicationDbContext>(options => options.UseSqlServer("name=ConnectionStrings:DefaultConnection"));
@@ -32,19 +27,9 @@ app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-//var cultures = new[] { "en", "ar" };
-//var LocalizationOptions = new RequestLocalizationOptions()
-//                              .AddSupportedCultures(cultures)
-//                              .AddSupportedUICultures(cultures);
-//LocalizationOptions.RequestCultureProviders.RemoveAt(0);
-//LocalizationOptions.RequestCultureProviders.RemoveAt(1);
-//app.UseRequestLocalization(LocalizationOptions);
 
 app.UseRouting();
 
 app.MapControllers();
-
-app.MapRazorPages();
-
 
 app.Run();
