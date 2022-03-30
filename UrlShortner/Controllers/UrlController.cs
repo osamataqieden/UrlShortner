@@ -25,11 +25,11 @@ namespace UrlShortner.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return BadRequest(new JsonResult(new
+                return NotFound(new
                 {
                     Error = "Link not found"
                 }
-                ));
+                );
             }
         }
 
@@ -40,16 +40,16 @@ namespace UrlShortner.Controllers
         {
             try
             {
-                return Ok(new JsonResult(_service.GetAllUrls()));
+                return Ok(_service.GetAllUrls());
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return BadRequest(new JsonResult(new
+                return BadRequest(new
                 {
                     Error = ex.Message
                 }
-                ));
+                );
             }
         }
 
@@ -62,12 +62,12 @@ namespace UrlShortner.Controllers
             {
                 int PageSize = Convert.ToInt32(pageSize);
                 int PageNum = Convert.ToInt32(pageNum);
-                return Ok(new JsonResult(_service.GetPagedUrls(PageNum, PageSize)));
+                return Ok(_service.GetPagedUrls(PageNum, PageSize));
             }
             catch(Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return BadRequest(new JsonResult(new { Error = ex.Message }));
+                return BadRequest(new { Error = ex.Message });
             }
         }
 
@@ -79,15 +79,15 @@ namespace UrlShortner.Controllers
             try
             {
                 var result = _service.AddUrl(url);
-                return Ok(new JsonResult(result));
+                return Ok(result);
             }
             catch(Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return BadRequest(new JsonResult(new
+                return BadRequest(new
                 {
                     Error = ex.Message
-                }));
+                });
             }
         }
 
@@ -100,14 +100,14 @@ namespace UrlShortner.Controllers
                 if (_service.isExist("", url))
                 {
                     _service.DeleteUrl(_service.GetShortUrl(url));
-                    return Ok(new JsonResult(new { Result = "Success" }));
+                    return Ok(new { Result = "Success" });
                 }
-                else return Ok(new JsonResult(new { Result = "Url not found" }));
+                else return NotFound(new { Result = "Url not found" });
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return BadRequest(new JsonResult(new { Error = ex.Message }));
+                return BadRequest(new { Error = ex.Message });
             }
         }
     }
