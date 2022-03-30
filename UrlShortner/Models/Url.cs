@@ -8,6 +8,7 @@
         private DateTime _createdOn;
         private bool _isActive;
 
+
         public int Id { get => id; set => id = value; }
         public string LongUrl { get => _longUrl; set => _longUrl = value; }
         public string ShortID { get => _shortID; set => _shortID = value; }

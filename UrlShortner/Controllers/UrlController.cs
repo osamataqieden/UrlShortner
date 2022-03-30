@@ -6,16 +6,13 @@ namespace UrlShortner.Controllers
     [ApiController]
     public class UrlController : ControllerBase
     {
-
         private readonly Services.IUrlService _service;
         private readonly ILogger<UrlController> _logger;
-
         public UrlController(Services.IUrlService service, ILogger<UrlController> logger)
         {
             _service = service;
             _logger = logger;
         }
-        [ResponseCache(Duration = 30)]
         [Route("/{ID}")]
         [HttpGet]
         public IActionResult Link(string ID)
@@ -36,7 +33,7 @@ namespace UrlShortner.Controllers
             }
         }
 
-        [ResponseCache(Duration = 30)]
+        [ResponseCache(Duration = 5)]
         [Route("/API/Url")]
         [HttpGet]
         public IActionResult GetAllUrls()
@@ -56,7 +53,7 @@ namespace UrlShortner.Controllers
             }
         }
 
-        [ResponseCache(Duration = 30)]
+        [ResponseCache(Duration = 5)]
         [Route("/API/Url/Paged")]
         [HttpGet]
         public IActionResult GetPagedUrls(string pageSize, string pageNum)
